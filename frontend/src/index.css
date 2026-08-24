@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  /* Civic palette — ink navy + marigold, sand paper background, banyan green for positive/eligible states */
+  --color-ink: #1B2A4A;
+  --color-ink-light: #2A3F68;
+  --color-marigold: #F0AB3D;
+  --color-marigold-dark: #D4890F;
+  --color-paper: #FBF9F4;
+  --color-sand: #F0EBDD;
+  --color-banyan: #1F7A5C;
+  --color-banyan-light: #E7F4EE;
+  --color-clay: #B23A2E;
+  --color-clay-light: #FBEAE8;
+  --color-slate: #4B5563;
+  --color-slate-light: #8792A2;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: var(--color-marigold);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-marigold-dark);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
