@@ -9,7 +9,12 @@ const isProd = process.env.NODE_ENV === "production";
 const cookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: "lax",
+  // "none" is required for the cookie to be sent on cross-origin requests
+  // (frontend and backend on different domains, e.g. two separate Render
+  // services). Browsers require secure:true whenever sameSite is "none".
+  // Locally (isProd false) both frontend and backend effectively share
+  // localhost, so "lax" is fine and avoids needing HTTPS in dev.
+  sameSite: isProd ? "none" : "lax",
   maxAge: 24 * 60 * 60 * 1000, // 1 day
 };
 

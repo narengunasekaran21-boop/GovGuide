@@ -10,7 +10,7 @@ export default function AdminUsers() {
   const [search, setSearch] = useState("");
 
   const fetchUsers = (q) => {
-    adminApi.listUsers(q).then(({ data }) => setUsers(data.users));
+    adminApi.listUsers(q).then(({ data }) => setUsers(Array.isArray(data?.users) ? data.users : [])).catch(() => setUsers([]));
   };
 
   useEffect(() => {

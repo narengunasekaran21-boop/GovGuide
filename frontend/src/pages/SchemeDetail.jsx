@@ -107,7 +107,7 @@ export default function SchemeDetail() {
       <div className="mt-10 grid gap-8 sm:grid-cols-2">
         <Section icon={CheckCircle2} title="Benefits">
           <ul className="space-y-2">
-            {scheme.benefits.map((b, i) => (
+            {(scheme.benefits ?? []).map((b, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-banyan" />
                 {b}
@@ -118,7 +118,7 @@ export default function SchemeDetail() {
 
         <Section icon={ListChecks} title="Eligibility criteria">
           <ul className="space-y-2">
-            {scheme.eligibility.map((e, i) => (
+            {(scheme.eligibility ?? []).map((e, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-marigold-dark" />
                 {e}
@@ -129,7 +129,7 @@ export default function SchemeDetail() {
 
         <Section icon={FileText} title="Documents required">
           <ul className="space-y-2">
-            {scheme.documents.map((d, i) => (
+            {(scheme.documents ?? []).map((d, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ink/40" />
                 {d}
@@ -140,7 +140,7 @@ export default function SchemeDetail() {
 
         <Section icon={ListChecks} title="How to apply">
           <ol className="space-y-2">
-            {scheme.application_steps.map((s, i) => (
+            {(scheme.application_steps ?? []).map((s, i) => (
               <li key={i} className="flex items-start gap-3 text-sm text-slate">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-[10px] font-semibold text-paper">
                   {i + 1}

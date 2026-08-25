@@ -27,7 +27,7 @@ export default function AdminActivity() {
   const [logs, setLogs] = useState(null);
 
   useEffect(() => {
-    adminApi.activityLogs(100).then(({ data }) => setLogs(data.logs));
+    adminApi.activityLogs(100).then(({ data }) => setLogs(Array.isArray(data?.logs) ? data.logs : [])).catch(() => setLogs([]));
   }, []);
 
   if (!logs) return <PageLoader />;

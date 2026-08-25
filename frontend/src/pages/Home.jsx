@@ -20,7 +20,10 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    schemeApi.categories().then(({ data }) => setCategories(data.categories)).catch(() => {});
+    schemeApi
+      .categories()
+      .then(({ data }) => setCategories(Array.isArray(data?.categories) ? data.categories : []))
+      .catch(() => setCategories([]));
   }, []);
 
   const handleSearch = (e) => {

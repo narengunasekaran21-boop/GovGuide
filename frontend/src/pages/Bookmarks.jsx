@@ -13,7 +13,11 @@ export default function Bookmarks() {
     setLoading(true);
     bookmarkApi
       .list()
-      .then(({ data }) => setSchemes(data.schemes.map((s) => ({ ...s, isBookmarked: true }))))
+      .then(({ data }) => {
+        const list = Array.isArray(data?.schemes) ? data.schemes : [];
+        setSchemes(list.map((s) => ({ ...s, isBookmarked: true })));
+      })
+      .catch(() => setSchemes([]))
       .finally(() => setLoading(false));
   };
 

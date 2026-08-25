@@ -20,16 +20,19 @@ export default function AdminDashboard() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    adminApi.dashboard().then(({ data }) => setData(data));
+    adminApi.dashboard().then(({ data }) => setData(data)).catch(() => setData({}));
   }, []);
 
   if (!data) return <PageLoader />;
 
   const stats = [
-    { label: "Total users", value: data.totalUsers, icon: Users2 },
-    { label: "Active schemes", value: data.totalSchemes, icon: FileStack },
-    { label: "Bookmarks saved", value: data.totalBookmarks, icon: Bookmark },
+    { label: "Total users", value: data.totalUsers ?? 0, icon: Users2 },
+    { label: "Active schemes", value: data.totalSchemes ?? 0, icon: FileStack },
+    { label: "Bookmarks saved", value: data.totalBookmarks ?? 0, icon: Bookmark },
   ];
+
+  const schemesByCategory = Array.isArray(data.schemesByCategory) ? data.schemesByCategory : [];
+  const recentActivity = Array.isArray(data.recentActivity) ? data.recentActivity : [];
 
   return (
     <div>
@@ -49,8 +52,8 @@ export default function AdminDashboard() {
         <div className="rounded-2xl border border-ink/10 bg-white p-6">
           <h2 className="font-display text-base font-semibold text-ink">Schemes by category</h2>
           <div className="mt-4 space-y-3">
-            {data.schemesByCategory.map((c) => {
-              const max = Math.max(...data.schemesByCategory.map((x) => x.count), 1);
+            {schemesByCategory.map((c) => {
+              const max = Math.max(...schemesByCategory.map((x) => x.count), 1);
               return (
                 <div key={c.category}>
                   <div className="flex justify-between text-xs text-slate">
@@ -75,7 +78,7 @@ export default function AdminDashboard() {
             <h2 className="font-display text-base font-semibold text-ink">Recent activity</h2>
           </div>
           <ul className="mt-4 space-y-3">
-            {data.recentActivity.map((log) => (
+            {recentActivity.map((log) => (
               <li key={log.id} className="border-b border-ink/5 pb-3 text-sm last:border-none last:pb-0">
                 <p className="font-medium text-ink">{ACTION_LABEL[log.action] || log.action}</p>
                 <p className="text-xs text-slate">
@@ -83,7 +86,7 @@ export default function AdminDashboard() {
                 </p>
               </li>
             ))}
-            {data.recentActivity.length === 0 && (
+            {recentActivity.length === 0 && (
               <p className="text-sm text-slate-light">No activity yet.</p>
             )}
           </ul>

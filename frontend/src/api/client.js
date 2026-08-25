@@ -1,7 +1,15 @@
 import axios from "axios";
 
+// In local dev, Vite's proxy (see vite.config.js) forwards "/api" to the
+// backend on localhost:5000, so a relative path works fine.
+// In production, the frontend and backend are typically deployed as two
+// separate services on different domains (e.g. two Render services), so
+// there's no proxy — VITE_API_BASE_URL must be set at build time to the
+// backend's full URL (e.g. https://govguide-backend.onrender.com/api).
+const baseURL = import.meta.env.VITE_API_BASE_URL || "/api";
+
 const api = axios.create({
-  baseURL: "/api",
+  baseURL,
   withCredentials: true, // send the httpOnly auth cookie
 });
 

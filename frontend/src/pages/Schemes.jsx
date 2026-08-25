@@ -26,7 +26,9 @@ export default function Schemes() {
         category: category || undefined,
         governmentLevel: governmentLevel || undefined,
       });
-      setSchemes(data.schemes);
+      setSchemes(Array.isArray(data?.schemes) ? data.schemes : []);
+    } catch {
+      setSchemes([]);
     } finally {
       setLoading(false);
     }
@@ -37,7 +39,10 @@ export default function Schemes() {
   }, [fetchSchemes]);
 
   useEffect(() => {
-    schemeApi.categories().then(({ data }) => setCategories(data.categories)).catch(() => {});
+    schemeApi
+      .categories()
+      .then(({ data }) => setCategories(Array.isArray(data?.categories) ? data.categories : []))
+      .catch(() => setCategories([]));
   }, []);
 
   const updateParam = (key, value) => {

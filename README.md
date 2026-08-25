@@ -165,6 +165,83 @@ and reinstall.
 
 ---
 
+---
+
+## Deploying (e.g. to Render)
+
+This is a two-service deployment: the backend is a **Web Service** (it runs Node
+continuously), and the frontend is a **Static Site** (it's just built HTML/CSS/JS files).
+They end up on two different URLs, so a couple of settings matter.
+
+### 1. Deploy the backend first
+
+Create a **Web Service** on Render pointing at this repo, with:
+
+| Setting          | Value                        |
+|-------------------|-------------------------------|
+| Root Directory    | `backend`                     |
+| Build Command     | `npm install`                 |
+| Start Command      | `npm start`                   |
+
+Under **Environment**, add these variables (same names as `.env.example`):
+
+| Key                    | Value                                                                 |
+|-------------------------|-----------------------------------------------------------------------|
+| `NODE_ENV`               | `production`                                                          |
+| `JWT_SECRET`             | a long random string — generate one, don't reuse the example value    |
+| `JWT_EXPIRES_IN`         | `1d`                                                                   |
+| `DATABASE_PATH`          | `./database/govguide.db`                                              |
+| `CLIENT_ORIGIN`          | your frontend's URL once deployed, e.g. `https://govguide.onrender.com` (no trailing slash) |
+| `SEED_ADMIN_EMAIL`       | your choice                                                            |
+| `SEED_ADMIN_PASSWORD`    | your choice — don't leave the example password in a public deployment |
+| `SEED_ADMIN_NAME`        | your choice                                                            |
+
+After the first deploy, open the Render **Shell** tab for this service and run
+`npm run seed` once to create the tables and demo data.
+
+> ⚠️ **SQLite persistence**: Render's free/standard web service disks are ephemeral —
+> the `govguide.db` file (and any data in it) can be wiped on redeploys or restarts.
+> That's fine for a coursework demo, but for anything longer-lived, either attach a
+> Render **persistent disk** to this service, or swap in a hosted database
+> (Render Postgres, etc.) instead of SQLite.
+
+Note the backend's URL once deployed, e.g. `https://govguide-backend.onrender.com`.
+
+### 2. Deploy the frontend
+
+Create a **Static Site** on Render pointing at the same repo, with:
+
+| Setting            | Value            |
+|----------------------|-------------------|
+| Root Directory       | `frontend`        |
+| Build Command        | `npm install && npm run build` |
+| Publish Directory     | `dist`            |
+
+Under **Environment**, add:
+
+| Key                    | Value                                                            |
+|-------------------------|--------------------------------------------------------------------|
+| `VITE_API_BASE_URL`      | your backend's URL + `/api`, e.g. `https://govguide-backend.onrender.com/api` |
+
+Since this is a Vite app, `VITE_API_BASE_URL` is baked into the build at build time —
+if you change it later, you need to trigger a new build, not just a restart.
+
+Also add a **Rewrite Rule** (Render Static Site → Redirects/Rewrites) so client-side
+routing works on refresh/direct links:
+
+| Source | Destination | Action  |
+|--------|-------------|---------|
+| `/*`   | `/index.html` | Rewrite |
+
+### 3. Wire them together
+
+Once both are deployed, go back to the **backend** service's environment variables and
+double check `CLIENT_ORIGIN` exactly matches the frontend's live URL (this is what CORS
+checks against — a mismatch here is the most common cause of login working locally but
+failing once deployed). Redeploy the backend after changing it.
+
+---
+
 ## Known limitations (demo scope)
 
 - No email verification or password-reset flow.

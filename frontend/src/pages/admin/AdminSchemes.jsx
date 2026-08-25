@@ -17,7 +17,7 @@ export default function AdminSchemes() {
   const [error, setError] = useState("");
 
   const fetchSchemes = () => {
-    adminApi.listAllSchemes().then(({ data }) => setSchemes(data.schemes));
+    adminApi.listAllSchemes().then(({ data }) => setSchemes(Array.isArray(data?.schemes) ? data.schemes : [])).catch(() => setSchemes([]));
   };
 
   useEffect(() => {
