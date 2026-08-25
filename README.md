@@ -1,8 +1,7 @@
 # GovGuide
 
 A full-stack demo web app for discovering Indian government welfare schemes, built around
-**role-based access control (RBAC)** as the core security concept for the *23CY506 – Web
-Exploitation and Defence* coursework module.
+**role-based access control (RBAC)** 
 
 Citizens can search schemes, check eligibility, and bookmark results. Admins get a separate
 console to manage the scheme catalogue and users — every admin action is enforced **on the
